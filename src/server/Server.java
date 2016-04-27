@@ -1,7 +1,6 @@
 package server;
 
 import protocol.Protocol;
-import server.Request.Request;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -10,11 +9,18 @@ import java.net.Socket;
 public class Server implements ServerInterface {
 	private int port;
 	private ServerSocket socket;
-
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private Protocol protocol;
+	/**
+	 *
+	 * @throws IOException
+     */
 	public Server() throws IOException {
 		this.port = 4000;
 		this.socket = new ServerSocket(this.port);
 		this.socket.setSoTimeout(10000);
+		protocol = new Protocol();
 		shutDownServer();
 	}
 
@@ -22,7 +28,6 @@ public class Server implements ServerInterface {
 	public void run() {
 		boolean status_connection = true;
 
-		Protocol protocol = new Protocol();
 
 		while (status_connection) {
 			try {
@@ -30,8 +35,8 @@ public class Server implements ServerInterface {
 				Socket clientSocket = socket.accept();
 				System.out.println(">>> connected to " + clientSocket.getRemoteSocketAddress());
 
-				ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-				ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+				in = new ObjectInputStream(clientSocket.getInputStream());
+				out = new ObjectOutputStream(clientSocket.getOutputStream());
 
 				String input, output;
 				while (status_connection) {
@@ -52,8 +57,14 @@ public class Server implements ServerInterface {
 	@Override
 	public void closeConnexion() throws IOException {
 		this.socket.close();
+		this.in.close();
+		this.out.close();
 	}
 
+	/**
+	 *
+	 * @throws IOException
+     */
 	private void shutDownServer() throws IOException {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println();
@@ -61,6 +72,11 @@ public class Server implements ServerInterface {
         }));
 	}
 
+	/**
+	 *
+	 * @param args
+	 * @throws IOException
+     */
 	public static void main(String args[]) throws IOException {
 		Server server = new Server();
 		server.run();
