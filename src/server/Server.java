@@ -1,6 +1,7 @@
 package server;
 
 import protocol.Protocol;
+import server.Request.Request;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -29,14 +30,14 @@ public class Server implements ServerInterface {
 				Socket clientSocket = socket.accept();
 				System.out.println(">>> connected to " + clientSocket.getRemoteSocketAddress());
 
-				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				PrintStream os = new PrintStream(clientSocket.getOutputStream());
+				ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+				ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 
 				String input, output;
 				while (status_connection) {
-					input = in.readLine();
+					input = (String) in.readObject();
 					output = protocol.handleInput(input);
-					os.println(output);
+					out.writeObject(output);
 
 					if (input.equalsIgnoreCase("BYE"))
 						status_connection = false;

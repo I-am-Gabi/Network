@@ -1,11 +1,6 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -70,27 +65,40 @@ public class Client implements ClientPattern {
 		
 	}
 
-	public void testClient() {
+	public void testClient() throws ClassNotFoundException {
 		Socket socket = null;
 		try {
 			socket = new Socket("127.0.0.1", 4000);
-			DataOutputStream os = new DataOutputStream(socket.getOutputStream());
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-			os.writeBytes("1\n");
-			os.writeBytes("2\n");
-			os.writeBytes("3\n");
-			os.writeBytes("1\n");
-			os.writeBytes("4\n");
-			os.writeBytes("BYE\n");
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
 			String responseLine;
 
-			while ((responseLine = in.readLine()) != null) {
-				System.out.println("Server: " + responseLine);
-			}
+			out.writeObject("1");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
 
-			os.close();
+			out.writeObject("2");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("3");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("1");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("4");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("BYE");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.close();
 			in.close();
 			socket.close();
 		} catch (UnknownHostException e) {
@@ -99,7 +107,7 @@ public class Client implements ClientPattern {
 		}
 	}
 
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException, ClassNotFoundException {
 		Client test = new Client("127.0.0.1", 4000);
 		test.testClient();
 	}
