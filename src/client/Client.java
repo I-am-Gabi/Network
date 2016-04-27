@@ -77,13 +77,20 @@ public class Client implements ClientPattern {
 			DataOutputStream os = new DataOutputStream(socket.getOutputStream());
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-			os.writeBytes("HELLO\n");
-			os.writeBytes("DATA\n");
+			os.writeBytes("1\n");
+			os.writeBytes("2\n");
+			os.writeBytes("3\n");
+			os.writeBytes("1\n");
+			os.writeBytes("4\n");
 			os.writeBytes("BYE\n");
+
 			String responseLine;
+
 			while ((responseLine = in.readLine()) != null) {
 				System.out.println("Server: " + responseLine);
-				if (responseLine.indexOf("Ok") != -1) {break;}} os.close();
+			}
+
+			os.close();
 			in.close();
 			socket.close();
 		} catch (UnknownHostException e) {
