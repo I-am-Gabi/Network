@@ -1,9 +1,10 @@
 package server;
 
+import protocol.Protocol;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Server implements ServerInterface {
 	private int port;
@@ -12,35 +13,37 @@ public class Server implements ServerInterface {
 	public Server() throws IOException {
 		this.port = 4000;
 		this.socket = new ServerSocket(this.port);
+		this.socket.setSoTimeout(10000);
 		shutDownServer();
 	}
 
 	@Override
-	public void run() throws IOException {
+	public void run() {
 		boolean status_connection = true;
+
+		Protocol protocol = new Protocol();
 
 		while (status_connection) {
 			try {
-				System.out.println(">>> waiting client in port " +
-						socket.getLocalPort());
+				System.out.println(">>> waiting client in port " + socket.getLocalPort());
 				Socket clientSocket = socket.accept();
-
 				System.out.println(">>> connected to " + clientSocket.getRemoteSocketAddress());
 
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
 				PrintStream os = new PrintStream(clientSocket.getOutputStream());
 
+				String input, output;
 				while (status_connection) {
-					String line = in.readLine();
-					os.println(line);
-					System.out.println(line);
-					if (line.contains("BYE"))
+					input = in.readLine();
+					output = protocol.handleInput(input);
+					os.println(output);
+
+					if (input.equalsIgnoreCase("BYE"))
 						status_connection = false;
 				}
-			} catch (Exception ex) {
 				closeConnexion();
-				System.err.print(ex.getMessage());
+			} catch (Exception ex) {
+				System.err.print(" --- " + ex.getMessage());
 			}
 		}
 	}
@@ -51,13 +54,11 @@ public class Server implements ServerInterface {
 	}
 
 	private void shutDownServer() throws IOException {
-		closeConnexion();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println();
             System.out.println("closing connection");
         }));
 	}
-
 
 	public static void main(String args[]) throws IOException {
 		Server server = new Server();
