@@ -74,6 +74,18 @@ public class Client implements ClientPattern {
 
 			String responseLine;
 
+			out.writeObject("HELLO");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("2");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("Gabriela");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
 			out.writeObject("1");
 			responseLine = (String) in.readObject();
 			System.out.println("Server: " + responseLine);
@@ -82,15 +94,11 @@ public class Client implements ClientPattern {
 			responseLine = (String) in.readObject();
 			System.out.println("Server: " + responseLine);
 
-			out.writeObject("3");
+			out.writeObject("Cesar");
 			responseLine = (String) in.readObject();
 			System.out.println("Server: " + responseLine);
 
 			out.writeObject("1");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
-
-			out.writeObject("4");
 			responseLine = (String) in.readObject();
 			System.out.println("Server: " + responseLine);
 
