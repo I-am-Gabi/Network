@@ -1,0 +1,46 @@
+
+Protocole afin de communiquer avec notre serveur d'administration .
+protocole SMTP exemple :
+
+[lecture]
+[envoyer: HELO nom de la machine de l'expéditeur]
+[envoyer: MAIL FROM:<expéditeur>]
+[envoyer: RCPT TO:<destinataire>]
+[envoyer: DATA]
+[envoyer: en tête]
+[envoyer: corps du mail]
+[envoyer: .]
+[envoyer: QUIT]
+
+
+objet {
+
+class authentification {
+	boolean stat;
+}
+
+class Hello {
+	String hello = “Hello”;
+}
+
+class etudiant {
+	String nom;
+}
+
+}
+
+1er étape : 
+
+Adresse serveur :
+Port serveur : 4000
+
+Connexion TCP : sur le serveur.
+Le client reçois un objet 
+[envoyer le HELO ]
+[le client envoie  objet Etudiant(“Nom etudiant”) ]
+[Le serveur vérifie l’identité du client]
+[le client rentre dans une boucle d’envoie de requete et de traitement des réponses]
+[le client envoie BYE ]
+ [fermer le serveur]
+
+
