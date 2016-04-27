@@ -11,12 +11,12 @@ import java.net.UnknownHostException;
 
 public class Client implements ClientPattern {
 
-	String adresse;
-	int port;
-	Socket socket;
+	private String host;
+	private int port;
+	private Socket socket;
 	
 	public Client(String adresse, int port) {
-		this.adresse = adresse;
+		this.host = adresse;
 		this.port = port;
 	}
 	
@@ -69,6 +69,31 @@ public class Client implements ClientPattern {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
+
+	public void testClient() {
+		Socket socket = null;
+		try {
+			socket = new Socket("127.0.0.1", 4000);
+			DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			os.writeBytes("HELLO\n");
+			os.writeBytes("DATA\n");
+			os.writeBytes("BYE\n");
+			String responseLine;
+			while ((responseLine = in.readLine()) != null) {
+				System.out.println("Server: " + responseLine);
+				if (responseLine.indexOf("Ok") != -1) {break;}} os.close();
+			in.close();
+			socket.close();
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host: hostname"); } catch (IOException e) {
+			System.err.println("Couldn't get I/O for the connection to: hostname");
+		}
+	}
+
+	public static void main(String args[]) throws IOException {
+		Client test = new Client("127.0.0.1", 4000);
+		test.testClient();
+	}
 }
