@@ -1,22 +1,17 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client implements ClientPattern {
 
-	String adresse;
-	int port;
-	Socket socket;
+	private String host;
+	private int port;
+	private Socket socket;
 	
 	public Client(String adresse, int port) {
-		this.adresse = adresse;
+		this.host = adresse;
 		this.port = port;
 	}
 	
@@ -69,6 +64,59 @@ public class Client implements ClientPattern {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
+
+	public void testClient() throws ClassNotFoundException {
+		Socket socket = null;
+		try {
+			socket = new Socket("127.0.0.1", 4000);
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+
+			String responseLine;
+
+			out.writeObject("HELLO");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("2");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("Gabriela");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("1");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("2");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("Cesar");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("1");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.writeObject("BYE");
+			responseLine = (String) in.readObject();
+			System.out.println("Server: " + responseLine);
+
+			out.close();
+			in.close();
+			socket.close();
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host: hostname"); } catch (IOException e) {
+			System.err.println("Couldn't get I/O for the connection to: hostname");
+		}
+	}
+
+	public static void main(String args[]) throws IOException, ClassNotFoundException {
+		Client test = new Client("127.0.0.1", 4000);
+		test.testClient();
+	}
 }
