@@ -17,8 +17,6 @@ public class Client implements ClientPattern {
 	
 	public void sayHello(){
 		BufferedReader os = null;
-		
-		
 		try {
 			os = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			

@@ -10,11 +10,7 @@ import java.util.StringJoiner;
  */
 public class Protocol implements ProtocolInterface {
     // TODO: convert final int variable in enum state
-    private final int WAITING = 0;
-    private final int HELLO = 1;
-    private final int START_COMUNICATION = 2;
-    private final int WAITING_STUDENT_NAME = 3;
-    private int state = WAITING;
+    private ProtocolStatement statement = ProtocolStatement.WAITING;
 
     private List<String> answers_database;
 
@@ -25,33 +21,34 @@ public class Protocol implements ProtocolInterface {
     @Override
     public String handleInput(String input) {
         String output = null;
-        switch (state) {
+        System.out.println(statement.ordinal());
+        switch (statement) {
             case WAITING:
                 output = "choice a service: ";
                 output += "(1) list students ";
                 output += "(2) add student ";
-                state = HELLO;
+                statement = ProtocolStatement.HELLO;
                 break;
             case HELLO:
                 try {
                     int id = Integer.parseInt(input);
                     if (id == 1) {
                         output = Arrays.toString(answers_database.toArray());
-                        state = HELLO;
+                        statement = ProtocolStatement.HELLO;
                     } else if (id == 2) {
                         output = "write the student name";
-                        state = WAITING_STUDENT_NAME;
+                        statement = ProtocolStatement.WAITING_NAME;
                     }
                 } catch (NumberFormatException ex) {
                     output = handleException(input);
                 }
                 break;
-            case WAITING_STUDENT_NAME:
+            case WAITING_NAME:
                 answers_database.add(input);
                 output = "added student";
-                state = HELLO;
+                statement = ProtocolStatement.HELLO;
                 break;
-            case START_COMUNICATION:
+            case START:
                 try {
                     int id = Integer.parseInt(input);
                     output = answers_database.get(id - 1);
@@ -60,6 +57,7 @@ public class Protocol implements ProtocolInterface {
                 }
                 break;
         }
+        System.out.println(output);
         return output;
     }
 
@@ -69,7 +67,7 @@ public class Protocol implements ProtocolInterface {
         String output;
         if (input.equalsIgnoreCase("bye")) {
             output = "BYE";
-            state = WAITING;
+            statement = ProtocolStatement.WAITING;
         } else {
             output = "you need choice an id [ " + 1 + " .. " + answers_database.size() + " ]";
         }

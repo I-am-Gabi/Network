@@ -27,8 +27,6 @@ public class Server implements ServerInterface {
 	@Override
 	public void run() {
 		boolean status_connection = true;
-
-
 		while (status_connection) {
 			try {
 				System.out.println(">>> waiting client in port " + socket.getLocalPort());
