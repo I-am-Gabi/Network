@@ -1,6 +1,6 @@
 package client;
 
-public interface ClientPattern {
+public interface ClientInterface {
 	public void connect();
 	public void sendMessage();
 	public void writesocket();

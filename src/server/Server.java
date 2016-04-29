@@ -1,5 +1,7 @@
 package server;
 
+import communication.request.Request;
+import communication.response.Response;
 import protocol.Protocol;
 
 import java.io.*;
@@ -36,13 +38,14 @@ public class Server implements ServerInterface {
 				in = new ObjectInputStream(clientSocket.getInputStream());
 				out = new ObjectOutputStream(clientSocket.getOutputStream());
 
-				String input, output;
+				Request input;
+				Response output;
 				while (status_connection) {
-					input = (String) in.readObject();
+					input = (Request) in.readObject();
 					output = protocol.handleInput(input);
 					out.writeObject(output);
 
-					if (input.equalsIgnoreCase("BYE"))
+					if (output.getContent().equalsIgnoreCase("BYE"))
 						status_connection = false;
 				}
 				closeConnexion();

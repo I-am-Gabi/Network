@@ -1,9 +1,10 @@
 package protocol;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
+import communication.request.Request;
+import communication.response.*;
+import util.DataBase;
+
+import java.io.IOException;
 
 /**
  * @version 27/04/16.
@@ -12,65 +13,47 @@ public class Protocol implements ProtocolInterface {
     // TODO: convert final int variable in enum state
     private ProtocolStatement statement = ProtocolStatement.WAITING;
 
-    private List<String> answers_database;
+    private Response response;
 
     public Protocol() {
-        answers_database = new ArrayList<>();
+        response = new ShowServices();
     }
 
     @Override
-    public String handleInput(String input) {
-        String output = null;
-        System.out.println(statement.ordinal());
+    public Response handleInput(Request input) {
+        if (input.getCommand().equalsIgnoreCase("BYE")) {
+            response = new Notice();
+            response.setContent("BYE");
+            return response;
+        }
+
         switch (statement) {
             case WAITING:
-                output = "choice a service: ";
-                output += "(1) list students ";
-                output += "(2) add student ";
+                response = new ShowServices();
                 statement = ProtocolStatement.HELLO;
                 break;
             case HELLO:
-                try {
-                    int id = Integer.parseInt(input);
-                    if (id == 1) {
-                        output = Arrays.toString(answers_database.toArray());
-                        statement = ProtocolStatement.HELLO;
-                    } else if (id == 2) {
-                        output = "write the student name";
-                        statement = ProtocolStatement.WAITING_NAME;
-                    }
-                } catch (NumberFormatException ex) {
-                    output = handleException(input);
+                int id_service = Integer.parseInt(input.getContent());
+                if (id_service == 1) {
+                    response = new ShowIdeas();
+                    statement = ProtocolStatement.HELLO;
+                } else if (id_service == 2) {
+                    response = new Notice();
+                    response.setContent("write the student name");
+                    statement = ProtocolStatement.WAITING_NAME;
                 }
                 break;
             case WAITING_NAME:
-                answers_database.add(input);
-                output = "added student";
+                response = new Notice();
+                (new DataBase()).addRegister(input.getContent());
+                response.setContent("added student");
                 statement = ProtocolStatement.HELLO;
                 break;
             case START:
-                try {
-                    int id = Integer.parseInt(input);
-                    output = answers_database.get(id - 1);
-                } catch (NumberFormatException ex) {
-                    output = handleException(input);
-                }
+                response = new ReturnIdea();
+                response.setContent(input.getContent());
                 break;
         }
-        System.out.println(output);
-        return output;
-    }
-
-    // TODO: create a real exception
-    // TODO: create a good object to use as response
-    private String handleException(String input) {
-        String output;
-        if (input.equalsIgnoreCase("bye")) {
-            output = "BYE";
-            statement = ProtocolStatement.WAITING;
-        } else {
-            output = "you need choice an id [ " + 1 + " .. " + answers_database.size() + " ]";
-        }
-        return output;
+        return response;
     }
 }
