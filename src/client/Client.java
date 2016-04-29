@@ -1,14 +1,18 @@
 package client;
 
+import communication.request.*;
+import communication.response.Response;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client implements ClientPattern {
+public class Client implements ClientInterface {
 
 	private String host;
 	private int port;
 	private Socket socket;
+	private Request request;
 	
 	public Client(String adresse, int port) {
 		this.host = adresse;
@@ -70,39 +74,41 @@ public class Client implements ClientPattern {
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
-			String responseLine;
+			Response response;
 
-			out.writeObject("HELLO");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new InitializeComunication();
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
-			out.writeObject("2");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new SelectService();
+			request.setContent("1");
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
-			out.writeObject("Gabriela");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new SelectService();
+			request.setContent("2");
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
-			out.writeObject("1");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new AddIdea();
+			request.setContent("island");
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
-			out.writeObject("2");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new SelectService();
+			request.setContent("1");
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
-			out.writeObject("Cesar");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
-
-			out.writeObject("1");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
-
-			out.writeObject("BYE");
-			responseLine = (String) in.readObject();
-			System.out.println("Server: " + responseLine);
+			request = new FinalizeComunication();
+			out.writeObject(request);
+			response = (Response) in.readObject();
+			System.out.println("Server: " + response.getContent());
 
 			out.close();
 			in.close();

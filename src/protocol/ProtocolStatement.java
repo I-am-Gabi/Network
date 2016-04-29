@@ -5,5 +5,4 @@ public enum ProtocolStatement{
 	HELLO(),
 	WAITING_NAME(),
 	START();
-
 }
