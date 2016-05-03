@@ -3,6 +3,7 @@ package server.thread;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import communication.request.Request;
@@ -12,27 +13,20 @@ import protocol.ProtocolInterface;
 import server.Server;
 
 public class Threading extends Thread implements ThreadInterface {
-	Socket socket;
-	ProtocolInterface protocol;
-	Request input;
-	Response output;
-	ObjectInputStream in;
-	ObjectOutputStream out;
-	Server server;
+	private Socket socket;
+	private ProtocolInterface protocol;
+	private Request input;
+	private Response output;
+	private ObjectInputStream in;
+	private ObjectOutputStream out;
+	private Server server;
 	
 
-	public Threading(Socket socket, Server server) {
+	public Threading(Socket socket, Server server, ProtocolInterface protocol) {
 		super();
+		this.protocol = protocol;
 		this.server = server;
-		this.socket = socket;
-		
-		try {
-			in = new ObjectInputStream(socket.getInputStream());
-			out = new ObjectOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.socket = socket;	
 		
 	}
 /**
@@ -44,21 +38,8 @@ public class Threading extends Thread implements ThreadInterface {
 		
 	@Override
 	public void start(ProtocolInterface protocol) {
-		System.out.println("start thread client on port : "+ socket.getPort());
-		this.socket = socket;
+		System.out.println("start thread client on port : "+ socket.getLocalPort());
 		this.protocol = protocol;
-		
-		try {
-			in = new ObjectInputStream(socket.getInputStream());
-			out = new ObjectOutputStream(socket.getOutputStream());
-			System.out.println("je suis dans le serveur! ");
-			
-			
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		super.start();
 		
 	}
@@ -68,15 +49,26 @@ public class Threading extends Thread implements ThreadInterface {
  * */
 @Override
 public void run() {
-	
+	System.out.println("run the thread !");
+	try {
+		in = new ObjectInputStream(socket.getInputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
 	while (true){
 		try {
 			input = (Request) in.readObject();
 			output = protocol.handleInput(input);
-		} catch (ClassNotFoundException e) {
+			out.writeObject(output);
+			if (output.getContent().equalsIgnoreCase("BYE")){
+				break;
+			}
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -35,11 +35,11 @@ public class Server implements ServerInterface {
 		boolean status_connection = true;
 		while (status_connection) {
 			try {
-				System.out.println("constructor");
-				Threading thread = new Threading(socket.accept(), this);
-				System.out.println("finsih constructor");
-				thread.start(protocol);
-				thread.run();
+				Socket client = socket.accept();
+				System.out.println("connected to : "+ client.getPort());
+				
+				new Threading(client, this, new Protocol()).start();
+				System.out.println("out of the thread");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -64,10 +64,8 @@ public class Server implements ServerInterface {
             System.out.println("closing connection");
         }));
 	}
-	
-	private void addClient(ObjectInputStream out){
-		if (out != null)
-			list.add(out);
+	private void sendMesageAll(){
+		
 	}
 	
 	
