@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 
 public interface ServerInterface {
+	
 	/**
 	 *
 	 * @throws IOException

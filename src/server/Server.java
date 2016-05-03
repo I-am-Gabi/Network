@@ -3,10 +3,12 @@ package server;
 import communication.request.Request;
 import communication.response.Response;
 import protocol.Protocol;
+import server.thread.Threading;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
 
 public class Server implements ServerInterface {
 	private int port;
@@ -14,6 +16,7 @@ public class Server implements ServerInterface {
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private Protocol protocol;
+	private Vector list;
 	/**
 	 *
 	 * @throws IOException
@@ -28,29 +31,18 @@ public class Server implements ServerInterface {
 
 	@Override
 	public void run() {
+		System.out.println("serveur runnig !");
 		boolean status_connection = true;
 		while (status_connection) {
 			try {
-				System.out.println(">>> waiting client in port " + socket.getLocalPort());
-				Socket clientSocket = socket.accept();
-				System.out.println(">>> connected to " + clientSocket.getRemoteSocketAddress());
-
-				in = new ObjectInputStream(clientSocket.getInputStream());
-				out = new ObjectOutputStream(clientSocket.getOutputStream());
-
-				Request input;
-				Response output;
-				while (status_connection) {
-					input = (Request) in.readObject();
-					output = protocol.handleInput(input);
-					out.writeObject(output);
-
-					if (output.getContent().equalsIgnoreCase("BYE"))
-						status_connection = false;
-				}
-				closeConnexion();
-			} catch (Exception ex) {
-				System.err.print(" --- " + ex.getMessage());
+				System.out.println("constructor");
+				Threading thread = new Threading(socket.accept(), this);
+				System.out.println("finsih constructor");
+				thread.start(protocol);
+				thread.run();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -72,7 +64,13 @@ public class Server implements ServerInterface {
             System.out.println("closing connection");
         }));
 	}
-
+	
+	private void addClient(ObjectInputStream out){
+		if (out != null)
+			list.add(out);
+	}
+	
+	
 	/**
 	 *
 	 * @param args
