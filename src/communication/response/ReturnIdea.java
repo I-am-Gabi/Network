@@ -1,24 +1,25 @@
 package communication.response;
 
-import util.DataBase;
+import server.model.Idea;
+import util.DBHelper;
 
 /**
  * @version 29/04/16.
  */
 public class ReturnIdea extends Response {
-    private String idea;
+    private Idea idea;
 
     public ReturnIdea() {
-        idea = "";
+        idea = new Idea();
     }
 
     @Override
     public String getContent() {
-        return idea;
+        return idea.toString();
     }
 
     @Override
     public void setContent(Object content) {
-        idea = (new DataBase()).getRegister((int)content);
+        idea = (new DBHelper()).selectIdeaByName((String)content);
     }
 }

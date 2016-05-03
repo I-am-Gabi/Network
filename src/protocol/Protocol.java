@@ -2,21 +2,26 @@ package protocol;
 
 import communication.request.Request;
 import communication.response.*;
-import util.DataBase;
+import util.FileHelper;
 
-import java.io.IOException;
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * @version 27/04/16.
  */
 public class Protocol implements ProtocolInterface {
     private ProtocolStatement statement = ProtocolStatement.WAITING;
-
     private Response response;
+    private int index_data;
+    private List<String> arguments;
 
     public Protocol() {
         response = new ShowServices();
+        index_data = 0;
+        arguments = new ArrayList<>(Arrays.asList("name", "description", "technologies", "student name", "student email"));
     }
 
     @Override
@@ -38,16 +43,18 @@ public class Protocol implements ProtocolInterface {
                     response = new ShowIdeas();
                     statement = ProtocolStatement.HELLO;
                 } else if ("add".equalsIgnoreCase(id_service)) {
+                    index_data = 0;
                     response = new Notice();
-                    response.setContent("write the idea name");
-                    statement = ProtocolStatement.WAITING_NAME;
+                    response.setContent("write the idea " + arguments.get(index_data++));
+                    statement = ProtocolStatement.WAITING_DATA;
                 }
                 break;
-            case WAITING_NAME:
+            case WAITING_DATA:
+                (new FileHelper()).addRegister(input.getContent());
                 response = new Notice();
-                (new DataBase()).addRegister(input.getContent());
-                response.setContent("added idea... choice a service");
-                statement = ProtocolStatement.HELLO;
+                response.setContent("write the " + arguments.get(index_data++));
+                if (index_data == arguments.size())
+                    statement = ProtocolStatement.HELLO;
                 break;
             case START:
                 response = new ReturnIdea();

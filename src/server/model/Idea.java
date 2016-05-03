@@ -1,12 +1,13 @@
 package server.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @version 03/05/16.
  */
-public class Idea {
+public class Idea implements Serializable {
     private String name;
     private String description;
     private String technologies;
@@ -72,6 +73,10 @@ public class Idea {
 
     @Override
     public String toString() {
-        return name + " " + description + " " + technologies + " " + student_email + " " + student_name;
+        return  " | name: " + name +
+                " | description: " + description +
+                " | technologies: " + technologies +
+                " | student email: " + student_email +
+                " | student name: " + student_name;
     }
 }

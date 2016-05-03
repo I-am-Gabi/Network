@@ -3,6 +3,6 @@ package protocol;
 public enum ProtocolStatement{
 	WAITING(),
 	HELLO(),
-	WAITING_NAME(),
+	WAITING_DATA(),
 	START();
 }

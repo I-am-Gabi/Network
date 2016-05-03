@@ -1,8 +1,0 @@
-devint
-
-server-client
-
-generator uml
-
-
-server
