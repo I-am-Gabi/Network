@@ -5,6 +5,7 @@ import communication.response.*;
 import util.DataBase;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 /**
  * @version 27/04/16.
@@ -32,11 +33,11 @@ public class Protocol implements ProtocolInterface {
                 statement = ProtocolStatement.HELLO;
                 break;
             case HELLO:
-                int id_service = Integer.parseInt(input.getContent());
-                if (id_service == 1) {
+                String id_service = input.getContent();
+                if ("list".equalsIgnoreCase(id_service)) {
                     response = new ShowIdeas();
                     statement = ProtocolStatement.HELLO;
-                } else if (id_service == 2) {
+                } else if ("add".equalsIgnoreCase(id_service)) {
                     response = new Notice();
                     response.setContent("write the idea name");
                     statement = ProtocolStatement.WAITING_NAME;
@@ -45,7 +46,7 @@ public class Protocol implements ProtocolInterface {
             case WAITING_NAME:
                 response = new Notice();
                 (new DataBase()).addRegister(input.getContent());
-                response.setContent("added student");
+                response.setContent("added idea... choice a service");
                 statement = ProtocolStatement.HELLO;
                 break;
             case START:

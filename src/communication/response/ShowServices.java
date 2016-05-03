@@ -12,8 +12,8 @@ public class ShowServices extends Response {
 
     public ShowServices() {
         services = new ArrayList<>();
-        services.add(" (1) list students");
-        services.add(" (2) add students");
+        services.add(" [list] list ideas");
+        services.add(" [add]  add idea");
     }
 
     @Override

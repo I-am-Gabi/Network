@@ -4,6 +4,5 @@ server-client
 
 generator uml
 
-island
 
-island
+server
