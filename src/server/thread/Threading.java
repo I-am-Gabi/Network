@@ -29,57 +29,49 @@ public class Threading extends Thread implements ThreadInterface {
 		this.socket = socket;	
 		
 	}
-/**
- * Start the thread !
- * Initialize the component needed by the protocol 
- * to improve the object analyze.
- * 
- * */
-		
+	/**
+	 * Start the thread !
+	 * Initialize the component needed by the protocol
+	 * to improve the object analyze.
+	 * */
 	@Override
 	public void start(ProtocolInterface protocol) {
-		System.out.println("start thread client on port : "+ socket.getLocalPort());
+		System.out.println("start thread client on port : " + socket.getLocalPort());
 		this.protocol = protocol;
 		super.start();
 		
 	}
-/**
- * 
- * 
- * */
-@Override
-public void run() {
-	System.out.println("run the thread !");
-	try {
-		in = new ObjectInputStream(socket.getInputStream());
-		out = new ObjectOutputStream(socket.getOutputStream());
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	
-	while (true){
+
+	/**
+	 *
+	 *
+	 * */
+	@Override
+	public void run() {
+		System.out.println("run the thread !");
 		try {
-			input = (Request) in.readObject();
-			output = protocol.handleInput(input);
-			out.writeObject(output);
-			if (output.getContent().equalsIgnoreCase("BYE")){
-				break;
-			}
+			in = new ObjectInputStream(socket.getInputStream());
+			out = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		break;
-	}
-	
-	
+		while (true) {
+			try {
+				input = (Request) in.readObject();
+				System.out.print(input.getCommand() + " " + input.getContent() + "\n");
+				output = protocol.handleInput(input);
+				out.writeObject(output);
+				if (output.getContent().equalsIgnoreCase("BYE")){
+					break;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	super.run();
-}
-
-
-
+	}
 }

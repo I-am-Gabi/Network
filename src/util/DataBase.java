@@ -55,8 +55,9 @@ public class DataBase {
         try {
             String line = br.readLine();
 
-            while (line != null && !line.equals("")) {
-                ideas_database.add(line);
+            while (line != null) {
+                if (!line.equals(""))
+                    ideas_database.add(line);
                 line = br.readLine();
             }
         } catch (IOException e) {
