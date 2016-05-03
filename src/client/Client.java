@@ -70,7 +70,7 @@ public class Client implements ClientInterface {
 	public void testClient() throws ClassNotFoundException {
 		Socket socket = null;
 		try {
-			socket = new Socket("127.0.0.1", 4000);
+			socket = new Socket("10.212.127.246", 4000);
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 

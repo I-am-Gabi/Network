@@ -19,6 +19,7 @@ public class Threading extends Thread implements ThreadInterface {
 	private Response output;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
+	
 	private Server server;
 	
 
@@ -73,11 +74,9 @@ public void run() {
 			e.printStackTrace();
 		}
 		
-		break;
 	}
+	System.exit(1);
 	
-	
-	super.run();
 }
 
 
