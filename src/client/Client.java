@@ -6,121 +6,99 @@ import communication.response.Response;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Client implements ClientInterface {
-
 	private String host;
 	private int port;
 	private Socket socket;
 	private Request request;
-	
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
+	private Response response;
 	public Client(String adresse, int port) {
 		this.host = adresse;
 		this.port = port;
 	}
-	
-	public void sayHello(){
-		BufferedReader os = null;
-		try {
-			os = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-
-	@Override
-	public void writesocket() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void readSocket() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeConnexion() {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-
-	@Override
-	public void sendMessage() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void testClient() throws ClassNotFoundException {
-		Socket socket = null;
-		try {
-			socket = new Socket("10.212.127.246", 4000);
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
-			Response response;
-
-			request = new InitializeComunication();
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			request = new SelectService();
-			request.setContent("1");
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			request = new SelectService();
-			request.setContent("2");
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			request = new AddIdea();
-			request.setContent("island");
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			request = new SelectService();
-			request.setContent("1");
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			request = new FinalizeComunication();
-			out.writeObject(request);
-			response = (Response) in.readObject();
-			System.out.println("Server: " + response.getContent());
-
-			out.close();
-			in.close();
-			socket.close();
-		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host: hostname"); } catch (IOException e) {
-			System.err.println("Couldn't get I/O for the connection to: hostname");
-		}
-	}
-
 	public static void main(String args[]) throws IOException, ClassNotFoundException {
-		Client test = new Client("127.0.0.1", 4000);
-		test.testClient();
+		Client client = new Client("127.0.0.1", 4000);
+		client.run();
+	}
+
+	@Override
+	public void connect() throws IOException, ClassNotFoundException {
+		socket = new Socket("127.0.0.1", 4000);
+		out = new ObjectOutputStream(socket.getOutputStream());
+		in = new ObjectInputStream(socket.getInputStream());
+
+		Response response;
+
+		request = new InitializeComunication();
+		out.writeObject(request);
+		response = (Response) in.readObject();
+		System.out.println("Server: " + response.getContent());
+	}
+
+	@Override
+	public void sendMessage(Request request) throws IOException, ClassNotFoundException {
+	}
+
+	@Override
+	public void writesocket() throws IOException {
+		out.writeObject(request);
+	}
+
+	@Override
+	public void readSocket() throws IOException, ClassNotFoundException {
+		response = (Response) in.readObject();
+		System.out.println("Server: " + response.getContent());
+	}
+
+	@Override
+	public void closeConnexion() throws IOException, ClassNotFoundException {
+		request = new FinalizeComunication();
+		out.writeObject(request);
+
+		out.close();
+		in.close();
+		socket.close();
+	}
+
+	@Override
+	public void run() throws IOException, ClassNotFoundException {
+		connect();
+
+		ClientState state = ClientState.ENTER_SERVICE;
+		ClientParser parser = new ClientParser();
+		boolean status_connection = true;
+
+		while (status_connection) {
+
+			System.out.print(">>> ");
+			Scanner scanner = new Scanner(System.in);
+			String input = scanner.next();
+
+			state = parser.handleState(input, state);
+			switch (state) {
+				case ENTER_SERVICE:
+					request = new SelectService();
+					request.setContent(input);
+					out.writeObject(request);
+					break;
+				case ADD_IDEA:
+					request = new AddIdea();
+					request.setContent(input);
+					out.writeObject(request);
+					break;
+				case QUIT:
+					closeConnexion();
+					break;
+				default:
+					System.err.print("ERROR");
+			}
+			readSocket();
+		}
+
+		closeConnexion();
 	}
 }

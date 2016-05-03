@@ -24,7 +24,6 @@ public class Server implements ServerInterface {
 	public Server() throws IOException {
 		this.port = 4000;
 		this.socket = new ServerSocket(this.port);
-		this.socket.setSoTimeout(10000);
 		protocol = new Protocol();
 		shutDownServer();
 	}
@@ -63,9 +62,6 @@ public class Server implements ServerInterface {
             System.out.println();
             System.out.println("closing connection");
         }));
-	}
-	private void sendMesageAll(){
-		
 	}
 	
 	
