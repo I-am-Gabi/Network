@@ -1,8 +1,11 @@
 package communication.response;
 
+import protocol.ProtocolStatement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * @version 29/04/16.
@@ -23,6 +26,5 @@ public class ShowServices extends Response {
 
     @Override
     public void setContent(Object content) {
-        services = (List<String>) content;
     }
 }

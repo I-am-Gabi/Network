@@ -14,8 +14,8 @@ public class ReturnIdea extends Response {
     }
 
     @Override
-    public String getContent() {
-        return idea.toString();
+    public Idea getContent() {
+        return idea;
     }
 
     @Override

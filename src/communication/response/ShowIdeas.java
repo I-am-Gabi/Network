@@ -16,12 +16,8 @@ public class ShowIdeas extends Response {
     }
 
     @Override
-    public String getContent() {
-        String ideasString = "";
-        for (Idea i: ideas) {
-            ideasString += (i.toString() + "\n");
-        }
-        return ideasString;
+    public List<Idea> getContent() {
+        return ideas;
     }
 
     @Override

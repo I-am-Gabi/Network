@@ -20,4 +20,9 @@ public class SelectIdea extends Request {
     public void setContent(Object content) {
         this.id = (String) content;
     }
+
+    @Override
+    public void invoke() {
+
+    }
 }

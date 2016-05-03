@@ -61,7 +61,7 @@ public class Threading extends Thread implements ThreadInterface {
 				System.out.print(input.getCommand() + " " + input.getContent() + "\n");
 				output = protocol.handleInput(input);
 				out.writeObject(output);
-				if (output.getContent().equalsIgnoreCase("BYE")){
+				if (output.getContent().equals("BYE")){
 					break;
 				}
 			} catch (IOException e) {

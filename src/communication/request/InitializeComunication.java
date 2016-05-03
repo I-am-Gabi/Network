@@ -18,4 +18,9 @@ public class InitializeComunication extends Request {
     public void setContent(Object content) {
 
     }
+
+    @Override
+    public void invoke() {
+
+    }
 }
