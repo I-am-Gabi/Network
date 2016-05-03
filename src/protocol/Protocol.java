@@ -10,7 +10,6 @@ import java.io.IOException;
  * @version 27/04/16.
  */
 public class Protocol implements ProtocolInterface {
-    // TODO: convert final int variable in enum state
     private ProtocolStatement statement = ProtocolStatement.WAITING;
 
     private Response response;
@@ -39,7 +38,7 @@ public class Protocol implements ProtocolInterface {
                     statement = ProtocolStatement.HELLO;
                 } else if (id_service == 2) {
                     response = new Notice();
-                    response.setContent("write the student name");
+                    response.setContent("write the idea name");
                     statement = ProtocolStatement.WAITING_NAME;
                 }
                 break;
