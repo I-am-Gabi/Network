@@ -15,7 +15,7 @@ public class Threading extends Thread {
 	private Request input;
 	private Response output;
 	private ObjectInputStream in;
-	private ObjectOutputStream out; 
+	private ObjectOutputStream out;
 	
 	/**
 	 * Threading's constructor.
