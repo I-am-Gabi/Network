@@ -4,17 +4,17 @@ import java.io.IOException;
 
 public interface ServerInterface {
 	
-	/**
-	 *
-	 * @throws IOException
+    /**
+     * Method to run the Server.
+     * @throws IOException
      */
-	void run() throws IOException;
+    void run() throws IOException;
 
-	/**
-	 *
-	 * @throws IOException
+    /**
+     * Method to close the Server.
+     * @throws IOException
      */
-	void closeConnexion() throws IOException;
+    void close() throws IOException;
 }
 
 

@@ -8,11 +8,12 @@ import java.util.List;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class ShowIdeas extends Response {
     private List<Idea> ideas;
 
     public ShowIdeas() {
-        ideas = (new DBHelper()).selectDB();
+        ideas = DBHelper.selectDB();
     }
 
     @Override

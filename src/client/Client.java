@@ -5,50 +5,62 @@ import communication.response.Response;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client implements ClientInterface {
-	private String host;
-	private int port;
-	private Socket socket;
-	private Request request;
-	private ObjectOutputStream out;
-	private ObjectInputStream in;
+    
+    // host to connection
+    private String host;
+    // port to connection
+    private int port;
+    
+    // client socket
+    private Socket socket; 
+    
+    // output and input stream
+    private ObjectOutputStream out;
+    private ObjectInputStream in; 
+    
+    // request and response object
+	private Request request; 
 	private Response response;
 
-	public Client(String adresse, int port) {
+	/**
+     * Client's constructor
+     * @param adresse 
+     * @param port
+     * @throws IOException 
+     */
+	public Client(String adresse, int port) throws IOException {
 		this.host = adresse;
 		this.port = port;
-	}
-
-	public static void main(String args[]) throws IOException, ClassNotFoundException {
-		Client client = new Client("127.0.0.1", 4000);
-		client.run();
+		shutDownServer();
 	}
 
 	@Override
 	public void connect() throws IOException, ClassNotFoundException {
-		socket = new Socket("127.0.0.1", 4000);
+		socket = new Socket(this.host, this.port);
 		out = new ObjectOutputStream(socket.getOutputStream());
 		in = new ObjectInputStream(socket.getInputStream());
 
-		Response response;
+		handShacke();
+    }  
 
-		request = new InitializeComunication();
-		out.writeObject(request);
-		response = (Response) in.readObject();
-		System.out.println("Server: " + response.getContent());
-	}
+    /**
+     * Method to make the handshake with the Serve. 
+     * It will send a HELLO to confirm the communication.
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
+    private void handShacke() throws ClassNotFoundException, IOException {
+        writesocket(new InitializeComunication());
+        readSocket();
+    } 
 
 	@Override
-	public void sendMessage(Request request) throws IOException, ClassNotFoundException {
-	}
-
-	@Override
-	public void writesocket() throws IOException {
-		out.writeObject(request);
-	}
+    public void writesocket(Object request) throws IOException, ClassNotFoundException {
+        out.writeObject(request);
+    }
 
 	@Override
 	public void readSocket() throws IOException, ClassNotFoundException {
@@ -58,9 +70,6 @@ public class Client implements ClientInterface {
 
 	@Override
 	public void closeConnexion() throws IOException, ClassNotFoundException {
-		request = new FinalizeComunication();
-		out.writeObject(request);
-
 		out.close();
 		in.close();
 		socket.close();
@@ -75,10 +84,7 @@ public class Client implements ClientInterface {
 		boolean status_connection = true;
 
 		while (status_connection) {
-
-			System.out.print(">>> ");
-			Scanner scanner = new Scanner(System.in);
-			String input = scanner.next();
+			String input = terminal();
 
 			state = parser.handleState(input, state);
 			switch (state) {
@@ -100,7 +106,40 @@ public class Client implements ClientInterface {
 			}
 			readSocket();
 		}
-
 		closeConnexion();
 	}
+	
+	/**
+     * Write messages in the terminal interface and return the input.
+     * @return the input.
+     */
+    private String terminal() {
+        System.out.print(">>> ");
+        @SuppressWarnings("resource")
+        String input = new Scanner(System.in).nextLine();
+        return input;
+    }
+    
+   /**
+    * 
+    * @throws IOException
+    */
+   private void shutDownServer() throws IOException {
+       Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+           try {
+               Thread.sleep(200);
+               System.out.println();
+               System.out.println("closing connection");
+               writesocket(new FinalizeComunication());
+               closeConnexion();
+           } catch (Exception e) { 
+               e.printStackTrace();
+           }
+      }));
+   }
+	
+    public static void main(String args[]) throws IOException, ClassNotFoundException {
+        Client client = new Client("127.0.0.1", 4000);
+        client.run();
+    } 
 }

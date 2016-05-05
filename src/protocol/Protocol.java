@@ -2,26 +2,17 @@ package protocol;
 
 import communication.request.Request;
 import communication.response.*;
-import util.FileHelper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
+import util.DBHelper; 
 
 /**
  * @version 27/04/16.
  */
 public class Protocol implements ProtocolInterface {
     private ProtocolStatement statement = ProtocolStatement.WAITING;
-    private Response response;
-    private int index_data;
-    private List<String> arguments;
+    private Response response; 
 
     public Protocol() {
-        response = new ShowServices();
-        index_data = 0;
-        arguments = new ArrayList<>(Arrays.asList("name", "description", "technologies", "student name", "student email"));
+        response = new ShowServices(); 
     }
 
     @Override
@@ -42,24 +33,19 @@ public class Protocol implements ProtocolInterface {
                 if ("list".equalsIgnoreCase(id_service)) {
                     response = new ShowIdeas();
                     statement = ProtocolStatement.HELLO;
-                } else if ("add".equalsIgnoreCase(id_service)) {
-                    index_data = 0;
+                } else if ("add".equalsIgnoreCase(id_service)) { 
                     response = new Notice();
-                    response.setContent("write the idea " + arguments.get(index_data++));
+                    response.setContent("write the idea... <idea name>, <idea description>, <technologies>, <student name>, <student email>");
                     statement = ProtocolStatement.WAITING_DATA;
                 }
                 break;
             case WAITING_DATA:
-                (new FileHelper()).addRegister(input.getContent());
+                DBHelper.insertDB(input.getContent().split(","));
                 response = new Notice();
-                response.setContent("write the " + arguments.get(index_data++));
-                if (index_data == arguments.size())
-                    statement = ProtocolStatement.HELLO;
-                break;
-            case START:
-                response = new ReturnIdea();
-                response.setContent(input.getContent());
-                break;
+                response.setContent("idea added... [add]/[list]"); 
+                statement = ProtocolStatement.HELLO;
+                break; 
+            default: break;
         }
         return response;
     }

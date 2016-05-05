@@ -3,6 +3,7 @@ package communication.request;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class SelectService extends Request {
     private String id_service;
 

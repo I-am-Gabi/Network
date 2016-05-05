@@ -10,9 +10,9 @@ import java.util.List;
  * @version 02/05/16.
  */
 public class DBHelper {
-    private Connection c;
+    private static Connection c;
 
-    private void connectDB() {
+    private static void connectDB() {
         c = null;
         try {
             Class.forName("org.sqlite.JDBC");
@@ -21,10 +21,14 @@ public class DBHelper {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Opened database successfully");
     }
 
-    public void insertDB(Idea idea)
+    public static void insertDB(String[] idea)
+    {
+         insertDB(new Idea(idea[0], idea[1], idea[2], idea[3], idea[4]));
+    }
+    
+    public static void insertDB(Idea idea)
     {
         connectDB();
         Statement stmt;
@@ -42,10 +46,9 @@ public class DBHelper {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Records created successfully");
     }
 
-    public List<Idea> selectDB()
+    public static List<Idea> selectDB()
     {
         connectDB();
         List<Idea> ideas = new ArrayList<>();
@@ -69,11 +72,10 @@ public class DBHelper {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return ideas;
     }
 
-    public Idea selectIdeaByName(String id)
+    public static Idea selectIdeaByName(String id)
     {
         Idea idea = null;
         connectDB();
@@ -96,27 +98,6 @@ public class DBHelper {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
-        System.out.println("Operation done successfully");
         return idea;
-    }
-
-    public static void main(String[] args) {
-        DBHelper helper = new DBHelper();
-        List<Idea> ideas = helper.selectDB();
-
-        for (Idea i: ideas) {
-            System.out.print(i.toString() + "\n");
-        }
-
-        Idea idea = new Idea("Logiciel", "presentation", "java", "cesar@email.com", "cesar");
-        helper.insertDB(idea);
-
-        ideas = helper.selectDB();
-        for (Idea i: ideas) {
-            System.out.print(i.toString());
-        }
-
-        idea = helper.selectIdeaByName("1");
-        System.out.print(idea.toString());
-    }
+    } 
 }

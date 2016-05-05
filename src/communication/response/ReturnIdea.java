@@ -6,6 +6,7 @@ import util.DBHelper;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class ReturnIdea extends Response {
     private Idea idea;
 
@@ -20,6 +21,6 @@ public class ReturnIdea extends Response {
 
     @Override
     public void setContent(Object content) {
-        idea = (new DBHelper()).selectIdeaByName((String)content);
+        idea = DBHelper.selectIdeaByName((String)content);
     }
 }

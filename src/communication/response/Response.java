@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public abstract class Response implements Serializable {
     public abstract Object getContent();
     public abstract void setContent(Object content);
