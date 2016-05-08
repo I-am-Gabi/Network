@@ -20,10 +20,5 @@ public class AddIdea extends Request {
     @Override
     public void setContent(Object content) {
         this.idea = (String) content;
-    }
-
-    @Override
-    public void invoke() {
-
-    }
+    } 
 }

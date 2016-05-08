@@ -20,10 +20,5 @@ public class SelectService extends Request {
     @Override
     public void setContent(Object content) {
         this.id_service = (String)  content;
-    }
-
-    @Override
-    public void invoke() {
-
-    }
+    } 
 }

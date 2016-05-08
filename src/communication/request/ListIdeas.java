@@ -18,10 +18,5 @@ public class ListIdeas extends Request {
 
     @Override
     public void setContent(Object content) {
-    }
-
-    @Override
-    public void invoke() {
-
-    }
+    } 
 }
