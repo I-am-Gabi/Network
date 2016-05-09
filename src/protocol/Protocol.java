@@ -2,21 +2,17 @@ package protocol;
 
 import communication.request.Request;
 import communication.response.*;
-import util.DataBase;
-
-import java.io.IOException;
-import java.io.StringReader;
+import util.DBHelper; 
 
 /**
  * @version 27/04/16.
  */
 public class Protocol implements ProtocolInterface {
     private ProtocolStatement statement = ProtocolStatement.WAITING;
-
-    private Response response;
+    private Response response; 
 
     public Protocol() {
-        response = new ShowServices();
+        response = new ShowServices(); 
     }
 
     @Override
@@ -37,22 +33,19 @@ public class Protocol implements ProtocolInterface {
                 if ("list".equalsIgnoreCase(id_service)) {
                     response = new ShowIdeas();
                     statement = ProtocolStatement.HELLO;
-                } else if ("add".equalsIgnoreCase(id_service)) {
+                } else if ("add".equalsIgnoreCase(id_service)) { 
                     response = new Notice();
-                    response.setContent("write the idea name");
-                    statement = ProtocolStatement.WAITING_NAME;
+                    response.setContent("write the idea... <idea name>, <idea description>, <technologies>, <student name>, <student email>");
+                    statement = ProtocolStatement.WAITING_DATA;
                 }
                 break;
-            case WAITING_NAME:
+            case WAITING_DATA:
+                DBHelper.insertDB(input.getContent().split(","));
                 response = new Notice();
-                (new DataBase()).addRegister(input.getContent());
-                response.setContent("added idea... choice a service");
+                response.setContent("idea added... [add]/[list]"); 
                 statement = ProtocolStatement.HELLO;
-                break;
-            case START:
-                response = new ReturnIdea();
-                response.setContent(input.getContent());
-                break;
+                break; 
+            default: break;
         }
         return response;
     }

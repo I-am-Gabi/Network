@@ -3,6 +3,7 @@ package communication.request;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class SelectService extends Request {
     private String id_service;
 
@@ -19,5 +20,5 @@ public class SelectService extends Request {
     @Override
     public void setContent(Object content) {
         this.id_service = (String)  content;
-    }
+    } 
 }

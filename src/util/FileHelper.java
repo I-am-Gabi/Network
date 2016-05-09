@@ -3,16 +3,15 @@ package util;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @version 29/04/16.
  */
-public class DataBase {
+public class FileHelper {
     private List<String> ideas_database;
 
 
-    public DataBase() {
+    public FileHelper() {
         ideas_database = new ArrayList<>();
     }
 
@@ -29,7 +28,7 @@ public class DataBase {
     public void addRegister(String data) {
         FileWriter fout = null;
         try {
-            fout = new FileWriter("resource/ideas.txt", true);
+            fout = new FileWriter("tmp_idea.txt", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +47,7 @@ public class DataBase {
         ideas_database.clear();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader("resource/ideas.txt"));
+            br = new BufferedReader(new FileReader("tmp_idea.txt"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,26 +1,26 @@
 package communication.response;
 
-import util.DataBase;
+import server.model.Idea;
+import util.DBHelper;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class ShowIdeas extends Response {
-    private List<String> answers_database;
+    private List<Idea> ideas;
 
     public ShowIdeas() {
-        answers_database = (new DataBase()).getRegisters();
+        ideas = DBHelper.selectDB();
     }
 
     @Override
-    public String getContent() {
-        return Arrays.toString(answers_database.toArray());
+    public List<Idea> getContent() {
+        return ideas;
     }
 
     @Override
     public void setContent(Object content) {}
-
 }

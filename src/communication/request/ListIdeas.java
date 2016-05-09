@@ -3,6 +3,7 @@ package communication.request;
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class ListIdeas extends Request {
 
     @Override
@@ -17,5 +18,5 @@ public class ListIdeas extends Request {
 
     @Override
     public void setContent(Object content) {
-    }
+    } 
 }

@@ -1,14 +1,40 @@
 package client;
 
-import communication.request.Request;
-
 import java.io.IOException;
 
 public interface ClientInterface {
-	public void connect() throws IOException, ClassNotFoundException;
-	public void sendMessage(Request output) throws IOException, ClassNotFoundException;
-	public void writesocket() throws IOException;
-	public void readSocket() throws IOException, ClassNotFoundException;
-	public void closeConnexion() throws IOException, ClassNotFoundException;
-	public void run() throws IOException, ClassNotFoundException;
+    /**
+     * Initialize the connection.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void connect() throws IOException, ClassNotFoundException; 
+    
+    /**
+     * Read the socket data
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void readSocket() throws IOException, ClassNotFoundException;
+    
+    /**
+     * Write the socket data
+     * @throws IOException
+     * @throws ClassNotFoundException 
+     */
+    public void writesocket(Object request) throws IOException, ClassNotFoundException;
+    
+    /**
+     * Close the connection.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void closeConnexion() throws IOException, ClassNotFoundException;
+    
+    /**
+     * Run the client.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+	public void run() throws IOException, ClassNotFoundException; 
 }

@@ -1,28 +1,22 @@
 package communication.response;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @version 29/04/16.
  */
+@SuppressWarnings("serial")
 public class ShowServices extends Response {
-    private List<String> services;
+    private String services;
 
     public ShowServices() {
-        services = new ArrayList<>();
-        services.add(" [list] list ideas");
-        services.add(" [add]  add idea");
+        services = "[add]/[list]";
     }
 
     @Override
     public String getContent() {
-        return Arrays.toString(services.toArray());
+        return services;
     }
 
     @Override
     public void setContent(Object content) {
-        services = (List<String>) content;
     }
 }

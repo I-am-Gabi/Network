@@ -1,46 +1,37 @@
+Protocol that governs the communication between client server.
 
-Protocole afin de communiquer avec notre serveur d'administration .
-protocole SMTP exemple :
+* Protocol to LIST the Ideas
+[send: HELO]
+[send: SELECT_SERVICE service_id] 
+[send: BYE]
 
-[lecture]
-[envoyer: HELO nom de la machine de l'expéditeur]
-[envoyer: MAIL FROM:<expéditeur>]
-[envoyer: RCPT TO:<destinataire>]
-[envoyer: DATA]
-[envoyer: en tête]
-[envoyer: corps du mail]
-[envoyer: .]
-[envoyer: QUIT]
+* Protocol to ADD the Ideas
+[send: HELO]
+[send: SELECT_SERVICE service_id] 
+[send: ADD idea_name, idea_description, idea_technologies, student_name, student_email] 
+[send: BYE]
 
 
-objet {
-
-class authentification {
-	boolean stat;
+public abstract class Request implements Serializable {
+    public abstract String getCommand();
+    public abstract String getContent();
+    public abstract void setContent(Object content); 
 }
 
-class Hello {
-	String hello = “Hello”;
+public abstract class Response implements Serializable {
+    public abstract Object getContent();
+    public abstract void setContent(Object content);
 }
 
-class etudiant {
-	String nom;
-}
+Simulation of communication between client server:
 
-}
-
-1er étape : 
-
-Adresse serveur :
-Port serveur : 4000
-
-Connexion TCP : sur le serveur.
-Le client reçois un objet 
-[envoyer le HELO ]
-[le client envoie  objet Etudiant(“Nom etudiant”) ]
-[Le serveur vérifie l’identité du client]
-[le client rentre dans une boucle d’envoie de requete et de traitement des réponses]
-[le client envoie BYE ]
- [fermer le serveur]
-
-
+>>> [CLIENT] - send a object <Request> HELO
+>>> [SERVER] - send a object <Response> SERVICES
+>>> [CLIENT] - send a object <Request> LIST
+>>> [SERVER] - send a object <Response> LIST OF IDEAS
+>>> [CLIENT] - send a object <Request> ADD
+>>> [SERVER] - send a object <Response> WRITE THE IDEA
+>>> [CLIENT] - send a object <Request> IDEA DATA
+>>> [SERVER] - send a object <Response> IDEA ADDED
+>>> [CLIENT] - send a object <Request> BYE
+... Client Thread closed.
