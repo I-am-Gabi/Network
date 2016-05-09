@@ -74,5 +74,6 @@ public class Threading extends Thread implements ThreadInterface {
 				e.printStackTrace();
 			}
 		}
+		return;
 	}
 }
