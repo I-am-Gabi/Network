@@ -1,10 +1,11 @@
 package communication.request;
 
+import server.Status;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
-public class FinalizeComunication extends Request {
+public class FinalizeComunication implements Request {
     @Override
     public String getCommand() {
         return "BYE";
@@ -18,5 +19,10 @@ public class FinalizeComunication extends Request {
     @Override
     public void setContent(Object content) {
 
-    } 
+    }
+
+    @Override
+    public Status execute() {
+        return Status.CODE300;
+    }
 }

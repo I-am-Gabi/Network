@@ -2,7 +2,8 @@ package protocol;
 
 import communication.request.Request;
 import communication.response.*;
-import util.DBHelper; 
+import server.Status;
+import util.DBHelper;
 
 /**
  * @version 27/04/16.
@@ -17,13 +18,15 @@ public class Protocol implements ProtocolInterface {
 
     @Override
     public Response handleInput(Request input) {
-        if (input.getCommand().equalsIgnoreCase("BYE")) {
+        Status status = input.execute();
+
+        if (status.equals(Status.CODE300)) {
             response = new Notice();
             response.setContent("BYE");
             return response;
         }
 
-        switch (statement) {
+        /*switch (statement) {
             case WAITING:
                 response = new ShowServices();
                 statement = ProtocolStatement.HELLO;
@@ -40,13 +43,12 @@ public class Protocol implements ProtocolInterface {
                 }
                 break;
             case WAITING_DATA:
-                DBHelper.insertDB(input.getContent().split(","));
                 response = new Notice();
                 response.setContent("idea added... [add]/[list]"); 
                 statement = ProtocolStatement.HELLO;
                 break; 
             default: break;
-        }
+        }*/
         return response;
     }
 }

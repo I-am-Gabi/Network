@@ -1,10 +1,11 @@
 package communication.request;
 
+import server.Status;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
-public class SelectService extends Request {
+public class SelectService implements Request {
     private String id_service;
 
     @Override
@@ -20,5 +21,10 @@ public class SelectService extends Request {
     @Override
     public void setContent(Object content) {
         this.id_service = (String)  content;
-    } 
+    }
+
+    @Override
+    public Status execute() {
+        return null;
+    }
 }

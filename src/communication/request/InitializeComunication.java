@@ -1,10 +1,11 @@
 package communication.request;
 
+import server.Status;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
-public class InitializeComunication extends Request {
+public class InitializeComunication implements Request {
     @Override
     public String getCommand() {
         return "HELO";
@@ -18,5 +19,10 @@ public class InitializeComunication extends Request {
     @Override
     public void setContent(Object content) {
 
-    } 
+    }
+
+    @Override
+    public Status execute() {
+        return Status.CODE200;
+    }
 }

@@ -1,10 +1,12 @@
 package communication.request;
 
+import server.Status;
+import util.DBHelper;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
-public class ListIdeas extends Request {
+public class ListIdeas implements Request {
 
     @Override
     public String getCommand() {
@@ -18,5 +20,11 @@ public class ListIdeas extends Request {
 
     @Override
     public void setContent(Object content) {
-    } 
+    }
+
+    @Override
+    public Status execute() {
+        System.out.print(DBHelper.selectDB());
+        return Status.CODE200;
+    }
 }
