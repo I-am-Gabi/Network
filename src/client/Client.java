@@ -85,8 +85,10 @@ public class Client implements ClientInterface {
 
 		while (status_connection) {
 			String input = terminal();
-
 			state = parser.handleState(input, state);
+			if (state == null){
+				continue;
+			}
 			switch (state) {
 				case ENTER_SERVICE:
 					request = new SelectService();
@@ -139,7 +141,7 @@ public class Client implements ClientInterface {
    }
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
-        Client client = new Client("127.0.0.1", 4000);
+        Client client = new Client("10.212.127.246", 4000);
         client.run();
     } 
 }

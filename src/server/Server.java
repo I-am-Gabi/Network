@@ -16,7 +16,7 @@ public class Server implements ServerInterface {
 	 * @throws IOException
      */
 	public Server() throws IOException {
-		this.port = 4000;
+		this.port = 4001;
 		this.socket = new ServerSocket(this.port); 
 		shutDownServer();
 	}
