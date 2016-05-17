@@ -1,10 +1,12 @@
 package communication.request;
 
+import server.Status;
+import util.DBHelper;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
-public class AddIdea extends Request {
+public class AddIdea implements Request {
     private String idea;
 
     @Override
@@ -20,5 +22,11 @@ public class AddIdea extends Request {
     @Override
     public void setContent(Object content) {
         this.idea = (String) content;
-    } 
+    }
+
+    @Override
+    public Status execute() {
+        DBHelper.insertDB(idea.split(","));
+        return Status.CODE200;
+    }
 }

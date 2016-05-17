@@ -83,12 +83,11 @@ public class Client implements ClientInterface {
 		ClientParser parser = new ClientParser();
 		boolean status_connection = true;
 
-		while (status_connection) {
+		while (true) {
 			String input = terminal();
 			state = parser.handleState(input, state);
-			if (state == null){
+			if (state == null)
 				continue;
-			}
 			switch (state) {
 				case ENTER_SERVICE:
 					request = new SelectService();
@@ -108,7 +107,7 @@ public class Client implements ClientInterface {
 			}
 			readSocket();
 		}
-		closeConnexion();
+		// closeConnexion();
 	}
 	
 	/**
