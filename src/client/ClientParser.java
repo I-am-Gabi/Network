@@ -7,7 +7,7 @@ public class ClientParser {
     public ClientState handleState(String input, ClientState state) {
         if ("BYE".equalsIgnoreCase(input))
             return ClientState.QUIT;
-        if (state.equals(ClientState.ADD_IDEA) || input.equalsIgnoreCase("list"))
+        if (ClientState.ADD_IDEA.equals(state) || "list".equalsIgnoreCase(input))
             return state;
         return ClientState.fromString(input.toUpperCase());
     }
