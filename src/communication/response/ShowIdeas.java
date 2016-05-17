@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
 public class ShowIdeas extends Response {
     private List<Idea> ideas;
 
@@ -20,7 +19,4 @@ public class ShowIdeas extends Response {
     public List<Idea> getContent() {
         return ideas;
     }
-
-    @Override
-    public void setContent(Object content) {}
 }

@@ -19,20 +19,16 @@ public class Client implements ClientInterface {
     
     // output and input stream
     private ObjectOutputStream out;
-    private ObjectInputStream in; 
-    
-    // request and response object
-	private Request request; 
-	private Response response;
+    private ObjectInputStream in;
 
 	/**
      * Client's constructor
-     * @param adresse 
+     * @param address
      * @param port
      * @throws IOException 
      */
-	public Client(String adresse, int port) throws IOException {
-		this.host = adresse;
+	public Client(String address, int port) throws IOException {
+		this.host = address;
 		this.port = port;
 		shutDownServer();
 	}
@@ -53,7 +49,7 @@ public class Client implements ClientInterface {
      * @throws IOException
      */
     private void handShacke() throws ClassNotFoundException, IOException {
-        writesocket(new InitializeComunication());
+        writesocket(new InitializeCommunication());
         readSocket();
     } 
 
@@ -64,7 +60,7 @@ public class Client implements ClientInterface {
 
 	@Override
 	public void readSocket() throws IOException, ClassNotFoundException {
-		response = (Response) in.readObject();
+		Response response = (Response) in.readObject();
 		System.out.println("Server: " + response.getContent());
 	}
 
@@ -85,12 +81,14 @@ public class Client implements ClientInterface {
 
 		while (true) {
 			String input = terminal();
-			state = parser.handleState(input, state);
-			if (state == null)
-				continue;
+
+			if ("BYE".equalsIgnoreCase(input))
+				state = ClientState.QUIT;
+
+			assert state != null;
 			switch (state) {
 				case ENTER_SERVICE:
-					request = new SelectService();
+					Request request = new SelectService();
 					request.setContent(input);
 					out.writeObject(request);
 					break;
@@ -101,13 +99,21 @@ public class Client implements ClientInterface {
 					break;
 				case QUIT:
 					closeConnexion();
+					status_connection = false;
 					break;
 				default:
 					System.err.print("ERROR");
 			}
+
+			if (!status_connection)
+				break;
+
+			state = parser.handleState(input, state);
+			if (state == null)
+				continue;
+
 			readSocket();
 		}
-		// closeConnexion();
 	}
 	
 	/**
@@ -116,9 +122,7 @@ public class Client implements ClientInterface {
      */
     private String terminal() {
         System.out.print(">>> ");
-        @SuppressWarnings("resource")
-        String input = new Scanner(System.in).nextLine();
-        return input;
+		return new Scanner(System.in).nextLine();
     }
     
    /**
@@ -131,7 +135,7 @@ public class Client implements ClientInterface {
                Thread.sleep(200);
                System.out.println();
                System.out.println("closing connection");
-               writesocket(new FinalizeComunication());
+               writesocket(new FinalizeCommunication());
                closeConnexion();
            } catch (Exception e) { 
                e.printStackTrace();
@@ -140,7 +144,7 @@ public class Client implements ClientInterface {
    }
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
-        Client client = new Client("10.212.127.246", 4000);
+        Client client = new Client("localhost", 4000);
         client.run();
     } 
 }

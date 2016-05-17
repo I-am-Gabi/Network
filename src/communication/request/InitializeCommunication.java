@@ -1,15 +1,13 @@
 package communication.request;
 
+import communication.response.Response;
+import communication.response.ShowServices;
 import server.Status;
 
 /**
  * @version 29/04/16.
  */
-public class InitializeComunication implements Request {
-    @Override
-    public String getCommand() {
-        return "HELO";
-    }
+public class InitializeCommunication implements Request {
 
     @Override
     public String getContent() {
@@ -18,11 +16,10 @@ public class InitializeComunication implements Request {
 
     @Override
     public void setContent(Object content) {
-
     }
 
     @Override
-    public Status execute() {
-        return Status.CODE200;
+    public Response execute() {
+        return new ShowServices();
     }
 }

@@ -1,5 +1,7 @@
 package communication.request;
 
+import communication.response.Notice;
+import communication.response.Response;
 import server.Status;
 import util.DBHelper;
 
@@ -8,11 +10,6 @@ import util.DBHelper;
  */
 public class AddIdea implements Request {
     private String idea;
-
-    @Override
-    public String getCommand() {
-        return "ADD";
-    }
 
     @Override
     public String getContent() {
@@ -25,8 +22,8 @@ public class AddIdea implements Request {
     }
 
     @Override
-    public Status execute() {
+    public Response execute() {
         DBHelper.insertDB(idea.split(","));
-        return Status.CODE200;
+        return new Notice("idea added... [add]/[list]", Status.CODE200);
     }
 }
