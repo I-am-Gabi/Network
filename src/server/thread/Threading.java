@@ -12,14 +12,12 @@ import protocol.ProtocolInterface;
 public class Threading extends Thread {
 	private Socket socket;
 	private ProtocolInterface protocol;
-	private Request input;
-	private Response output;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	
 	/**
 	 * Threading's constructor.
-	 * @param socket
+	 * @param socket socket
 	 * @param protocol communication protocol.
 	 */
 	public Threading(Socket socket, ProtocolInterface protocol) {
@@ -42,9 +40,8 @@ public class Threading extends Thread {
         
 		while (running) {
 			try {
-				input = (Request) in.readObject();
-				System.out.print(input.getCommand() + " " + input.getContent() + "\n");
-				output = protocol.handleInput(input);
+				Request input = (Request) in.readObject();
+				Response output = protocol.handleInput(input);
 				out.writeObject(output);
 				if (output.getContent().equals("BYE")) {
 				    running = false;
@@ -55,6 +52,5 @@ public class Threading extends Thread {
                 e.printStackTrace();
             }
 		}
-		return;
 	}
 }

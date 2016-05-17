@@ -1,19 +1,20 @@
 package communication.response;
 
+import server.Status;
+
 /**
  * @version 29/04/16.
  */
-@SuppressWarnings("serial")
 public class Notice extends Response {
     private String message;
+
+    public Notice(Object content, Status status) {
+        this.message = (String) content;
+        this.status = status;
+    }
 
     @Override
     public String getContent() {
         return message;
-    }
-
-    @Override
-    public void setContent(Object content) {
-        this.message = (String) content;
     }
 }

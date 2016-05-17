@@ -16,14 +16,14 @@ public class Server implements ServerInterface {
 	 * @throws IOException
      */
 	public Server() throws IOException {
-		this.port = 4001;
+		this.port = 4000;
 		this.socket = new ServerSocket(this.port); 
 		shutDownServer();
 	}
 
 	@Override
 	public void run() {
-		System.out.println("server running!");
+		System.out.println("server running... LOCAL ADDRESS: " + socket.getLocalSocketAddress());
 
 		while (true) {
 			try {

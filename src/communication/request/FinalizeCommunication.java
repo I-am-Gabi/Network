@@ -1,15 +1,13 @@
 package communication.request;
 
+import communication.response.Notice;
+import communication.response.Response;
 import server.Status;
 
 /**
  * @version 29/04/16.
  */
-public class FinalizeComunication implements Request {
-    @Override
-    public String getCommand() {
-        return "BYE";
-    }
+public class FinalizeCommunication implements Request {
 
     @Override
     public String getContent() {
@@ -18,11 +16,10 @@ public class FinalizeComunication implements Request {
 
     @Override
     public void setContent(Object content) {
-
     }
 
     @Override
-    public Status execute() {
-        return Status.CODE300;
+    public Response execute() {
+        return new Notice("BYE", Status.CODE200);
     }
 }
