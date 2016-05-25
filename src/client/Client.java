@@ -100,6 +100,10 @@ public class Client implements ClientInterface {
 				case QUIT:
 					request = new FinalizeCommunication();
 					out.writeObject(request);
+<<<<<<< HEAD
+=======
+					closeConnexion();
+>>>>>>> bb5d552004426d46bf98aeaf136f3f0ae95bd259
 					status_connection = false;
 					closeConnexion();
 					break;
@@ -147,7 +151,7 @@ public class Client implements ClientInterface {
    }
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
-        Client client = new Client("localhost", 4000);
+        Client client = new Client("10.212.127.246", 4000);
         client.run();
     } 
 }

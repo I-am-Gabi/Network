@@ -52,6 +52,7 @@ public class Threading extends Thread {
                 e.printStackTrace();
             }
 		}
+		System.exit(0);
 	}
 
 	private void close() throws IOException {
