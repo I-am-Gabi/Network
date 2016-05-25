@@ -20,10 +20,10 @@ public class Threading extends Thread {
 	 * @param socket socket
 	 * @param protocol communication server.protocol.
 	 */
-	public Threading(Socket socket, ProtocolInterface protocol) {
+	public Threading(Socket socket, ProtocolInterface protocol) throws IOException {
 		super();
 		this.protocol = protocol; 
-		this.socket = socket;	
+		this.socket = socket;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class Threading extends Thread {
 				Response output = protocol.handleInput(input);
 				if (output.getContent().equals("BYE")) {
 				    running = false;
-                    socket.close();
+					close();
 					break;
 				}
 				out.writeObject(output);
@@ -53,5 +53,11 @@ public class Threading extends Thread {
             }
 		}
 		System.exit(0);
+	}
+
+	private void close() throws IOException {
+		out.close();
+		in.close();
+		socket.close();
 	}
 }
