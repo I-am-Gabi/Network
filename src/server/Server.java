@@ -1,6 +1,6 @@
 package server;
 
-import protocol.Protocol;
+import server.protocol.Protocol;
 import server.thread.Threading;
 
 import java.io.*;
