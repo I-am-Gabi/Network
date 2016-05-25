@@ -79,7 +79,7 @@ public class Client implements ClientInterface {
 		ClientParser parser = new ClientParser();
 		boolean status_connection = true;
 
-		while (true) {
+		while (status_connection) {
 			String input = terminal();
 
 			if ("BYE".equalsIgnoreCase(input))
@@ -98,6 +98,8 @@ public class Client implements ClientInterface {
 					out.writeObject(request);
 					break;
 				case QUIT:
+					request = new FinalizeCommunication();
+					out.writeObject(request);
 					closeConnexion();
 					status_connection = false;
 					break;
@@ -135,7 +137,8 @@ public class Client implements ClientInterface {
                Thread.sleep(200);
                System.out.println();
                System.out.println("closing connection");
-               writesocket(new FinalizeCommunication());
+               if (!socket.isClosed())
+            	   writesocket(new FinalizeCommunication());
                closeConnexion();
            } catch (Exception e) { 
                e.printStackTrace();
@@ -144,7 +147,7 @@ public class Client implements ClientInterface {
    }
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
-        Client client = new Client("localhost", 4000);
+        Client client = new Client("10.212.127.246", 4000);
         client.run();
     } 
 }

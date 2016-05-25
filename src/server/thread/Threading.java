@@ -42,15 +42,16 @@ public class Threading extends Thread {
 			try {
 				Request input = (Request) in.readObject();
 				Response output = protocol.handleInput(input);
-				out.writeObject(output);
 				if (output.getContent().equals("BYE")) {
 				    running = false;
                     socket.close();
 					break;
 				}
+				out.writeObject(output);
 			} catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 		}
+		System.exit(0);
 	}
 }
