@@ -7,7 +7,7 @@ import java.net.Socket;
 
 import communication.request.Request;
 import communication.response.Response; 
-import protocol.ProtocolInterface; 
+import server.protocol.ProtocolInterface;
 
 public class Threading extends Thread {
 	private Socket socket;
@@ -18,7 +18,7 @@ public class Threading extends Thread {
 	/**
 	 * Threading's constructor.
 	 * @param socket socket
-	 * @param protocol communication protocol.
+	 * @param protocol communication server.protocol.
 	 */
 	public Threading(Socket socket, ProtocolInterface protocol) {
 		super();
