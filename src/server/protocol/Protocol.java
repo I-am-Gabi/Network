@@ -1,9 +1,7 @@
-package protocol;
+package server.protocol;
 
 import communication.request.Request;
 import communication.response.*;
-import server.Status;
-import util.DBHelper;
 
 /**
  * @version 27/04/16.

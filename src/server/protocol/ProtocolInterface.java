@@ -1,4 +1,4 @@
-package protocol;
+package server.protocol;
 
 import communication.request.Request;
 import communication.response.Response;
