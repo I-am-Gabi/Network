@@ -17,7 +17,7 @@ public class Server implements ServerInterface {
      */
 	public Server() throws IOException {
 		this.port = 4000;
-		this.socket = new ServerSocket(this.port); 
+		this.socket = new ServerSocket(this.port);
 		shutDownServer();
 	}
 
@@ -56,7 +56,7 @@ public class Server implements ServerInterface {
             }
         }));
     }
-	
+
 	
 	/**
 	 * Main to run the Server.

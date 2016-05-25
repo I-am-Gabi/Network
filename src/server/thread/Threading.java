@@ -20,10 +20,10 @@ public class Threading extends Thread {
 	 * @param socket socket
 	 * @param protocol communication server.protocol.
 	 */
-	public Threading(Socket socket, ProtocolInterface protocol) {
+	public Threading(Socket socket, ProtocolInterface protocol) throws IOException {
 		super();
 		this.protocol = protocol; 
-		this.socket = socket;	
+		this.socket = socket;
 	}
 
 	@Override
@@ -42,15 +42,21 @@ public class Threading extends Thread {
 			try {
 				Request input = (Request) in.readObject();
 				Response output = protocol.handleInput(input);
-				out.writeObject(output);
 				if (output.getContent().equals("BYE")) {
 				    running = false;
-                    socket.close();
+					close();
 					break;
 				}
+				out.writeObject(output);
 			} catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 		}
+	}
+
+	private void close() throws IOException {
+		out.close();
+		in.close();
+		socket.close();
 	}
 }

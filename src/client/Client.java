@@ -79,7 +79,7 @@ public class Client implements ClientInterface {
 		ClientParser parser = new ClientParser();
 		boolean status_connection = true;
 
-		while (true) {
+		while (status_connection) {
 			String input = terminal();
 
 			if ("BYE".equalsIgnoreCase(input))
@@ -98,8 +98,10 @@ public class Client implements ClientInterface {
 					out.writeObject(request);
 					break;
 				case QUIT:
-					closeConnexion();
+					request = new FinalizeCommunication();
+					out.writeObject(request);
 					status_connection = false;
+					closeConnexion();
 					break;
 				default:
 					System.err.print("ERROR");
@@ -135,7 +137,8 @@ public class Client implements ClientInterface {
                Thread.sleep(200);
                System.out.println();
                System.out.println("closing connection");
-               writesocket(new FinalizeCommunication());
+			   if (!socket.isClosed())
+				   writesocket(new FinalizeCommunication());
                closeConnexion();
            } catch (Exception e) { 
                e.printStackTrace();

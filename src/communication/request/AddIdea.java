@@ -23,7 +23,12 @@ public class AddIdea implements Request {
 
     @Override
     public Response execute() {
-        DBHelper.insertDB(idea.split(","));
-        return new Notice("idea added... [add]/[list]", Status.CODE200);
+        String[] data = idea.split(",");
+        if (data.length == 5) {
+            DBHelper.insertDB(idea.split(","));
+            return new Notice("idea added... [add]/[list]", Status.CODE200);
+        } else {
+            return new Notice("Error: number of arguments", Status.CODE300);
+        }
     }
 }
