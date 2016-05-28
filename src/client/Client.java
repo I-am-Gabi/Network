@@ -137,7 +137,7 @@ public class Client implements ClientInterface {
                Thread.sleep(200);
                System.out.println();
                System.out.println("closing connection");
-			   if (!socket.isClosed())
+			   if (!socket.isClosed() && socket != null)
 				   writesocket(new FinalizeCommunication());
                closeConnexion();
            } catch (Exception e) { 
@@ -147,7 +147,7 @@ public class Client implements ClientInterface {
    }
 	
     public static void main(String args[]) throws IOException, ClassNotFoundException {
-        Client client = new Client("10.212.127.246", 4000);
+        Client client = new Client("localhost", 4000);
         client.run();
     } 
 }
