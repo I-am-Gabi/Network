@@ -100,10 +100,6 @@ public class Client implements ClientInterface {
 				case QUIT:
 					request = new FinalizeCommunication();
 					out.writeObject(request);
-<<<<<<< HEAD
-=======
-					closeConnexion();
->>>>>>> bb5d552004426d46bf98aeaf136f3f0ae95bd259
 					status_connection = false;
 					closeConnexion();
 					break;

@@ -1,8 +1,6 @@
 package server.thread;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream; 
+import java.io.*;
 import java.net.Socket;
 
 import communication.request.Request;
@@ -28,7 +26,7 @@ public class Threading extends Thread {
 
 	@Override
 	public void run() {
-        System.out.println("start thread client on port : " + socket.getLocalPort());
+        System.out.println("start thread client : " + socket.getLocalAddress() + ":" + socket.getLocalPort());
         boolean running = true;
 
         try {
@@ -42,6 +40,7 @@ public class Threading extends Thread {
 			try {
 				Request input = (Request) in.readObject();
 				Response output = protocol.handleInput(input);
+
 				if (output.getContent().equals("BYE")) {
 				    running = false;
 					close();
@@ -49,10 +48,14 @@ public class Threading extends Thread {
 				}
 				out.writeObject(output);
 			} catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+				try {
+					close();
+					running = false;
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
-		System.exit(0);
 	}
 
 	private void close() throws IOException {
